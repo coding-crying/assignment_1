@@ -33,3 +33,32 @@ There are automated checks that verify that your submission is correct:
 
 ## Your report
 
+For the dataset diabetes.txt, this is the attribute information:
+age age in years
+sex
+bmi body mass index
+bp average blood pressure
+s1 tc, total serum cholesterol
+s2 ldl, low-density lipoproteins
+s3 hdl, high-density lipoproteins
+s4 tch, total cholesterol / HDL
+s5 ltg, possibly log of serum triglycerides level
+s6 glu, blood sugar level
+
+Because sex is a categorical variable, we will remove it for comparison with an MLR from a package. This is applied in testMLR.py, the output of which is:
+Own coefficients: [-3.63898716e+02 -1.20515114e-01  6.00406612e+00  9.50507937e-01
+ -9.80784274e-01  6.58496188e-01  5.13628212e-01  4.65988116e+00
+  6.89473421e+01  2.02625303e-01]
+sklearn coefficients: [-3.63898716e+02 -1.20515114e-01  6.00406612e+00  9.50507937e-01
+ -9.80784274e-01  6.58496188e-01  5.13628212e-01  4.65988116e+00
+  6.89473421e+01  2.02625303e-01]
+Own predictions: [215.96752121  63.41589184 186.67691925 156.33694689 115.81197916
+ 103.25635897  86.75971231 127.06347839 171.51374095 208.28740647
+  85.63412266 100.21574365 107.9324862  177.25210152  98.78680101
+ 180.99101205 208.26900779 187.91555483 136.95837839 120.04595369]
+sklearn predictions: [215.96752121  63.41589184 186.67691925 156.33694689 115.81197916
+ 103.25635897  86.75971231 127.06347839 171.51374095 208.28740647
+  85.63412266 100.21574365 107.9324862  177.25210152  98.78680101
+ 180.99101205 208.26900779 187.91555483 136.95837839 120.04595369]
+
+ As you can see, the package creates the exact same results.
