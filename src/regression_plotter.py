@@ -1,0 +1,137 @@
+from matplotlib.pyplot import figure, show, subplots
+from mpl_toolkits.mplot3d import Axes3D
+import math
+import numpy as np
+
+class RegressionPlotter:
+    def __init__(self, model, X, Y):
+        """Handles the initialization of variables for the RegressionPlotter class
+        
+        Parameters:
+        model - The regression model to use
+        X - The variables to use as features
+        Y - The target variables
+        
+        Returns:
+        """
+        self.model = model
+        self.data = np.concatenate((Y.reshape(-1, 1), X), axis=1)
+
+    def plotRegression(self, featureIndices=None, behavior="line"):
+        """Plots regression based on specified behavior
+        
+        Parameters:
+        featureIndices - List of feature indices to include. Default = None, meaning use all features
+        behavior - Defines what type of plot to make. Options:
+            line - plots a single regression line
+            plane - Plots regression plane
+            multiple - Plots multiple lines in subplots
+
+        Returns:
+        """
+        numFeatures = self.data.shape[1]-1
+        if featureIndices == None:
+            featureIndices = list(range(1, numFeatures + 1))
+
+        if behavior == "multiple":
+            self.plotMultipleRegression(featureIndices)
+        else:
+            for i in featureIndices:
+                if behavior == "line":
+                    self.plotRegressionLine(i)
+                if behavior == "plane":
+                    self.plotRegressionPlane(i)
+
+    def plotRegressionLine(self, featureIndex):
+        """Plot a regression line of data considering a single feature
+        
+        Parameters:
+        featureIndex - the index of the feature to plot from self.data
+        
+        Returns:
+        """
+        print("here")
+        x = self.data[:, featureIndex]
+        y = self.data[:, 0]
+
+        fig = figure()
+        frame = fig.add_subplot()
+        frame.scatter(x,y, label=f"Feature {featureIndex}")
+        frame.set_xlabel(f"Feature {featureIndex}")
+        frame.set_ylabel("Target variable")
+        frame.set_title("Linear regression line")
+        frame.legend()
+        show()
+
+    def plotRegressionPlane(self, featureIndex):
+        """Plot a regression plane of data considering a single feature and predicting the second
+        
+        Parameters:
+        featureIndex - the index of the feature to plot from self.data
+        
+        Returns:
+        """
+        # TODO function does not work
+        x = self.data[:, featureIndex]
+        y = self.data[:, 0]
+        z = self.model.predict(self.data[:, 1:])
+
+        fig = figure()
+        frame = fig.add_subplot(111, projection="3d")
+        fig.scatter(x,y,z, label=f"Feature {featureIndex}")
+        frame.set_xlabel(f"Feature {featureIndex}")
+        frame.set_ylabel("Target variable")
+        frame.set_zlabel("Predicted target variable")
+        frame.set_title("Linear regression plane")
+        frame.legend()
+        show()
+
+    def calculateSubplotLayout(self, nPlots):
+        """Calculates the optimal layout of rows and columns to plot in subplots
+        
+        Parameters:
+        nPlots - the number of plots to create
+        
+        Returns:
+        nRows - The number of rows to use
+        nCols - The number of columns to use
+        """
+
+        if nPlots == 1:
+            return (1,1)
+        
+        nCols = math.ceil(math.sqrt(nPlots))
+        nRows = math.ceil(nPlots/nCols)
+
+        return (nRows, nCols)
+
+    def plotMultipleRegression(self, featureIndices):
+        """Plots all feature indices against the target values in a 2D grid of subplots.
+        
+        Parameters:
+        featureIndices - List of indices of data to plot from self.data
+        
+        Returns:
+        """
+        nRows, nCols = self.calculateSubplotLayout(len(featureIndices))
+        # TODO there is unexpected behavior here where if there is an empty slot, the same feature gets plot multiple times
+        # TODO when a 1d axis is optimal, an exception gets thrown
+        fig, axs = subplots(nRows, nCols)
+        for i in range(nRows):
+            for j in range(nCols):
+                x = self.data[:, i+j]
+                y = self.data[:, 0]
+
+                axs[i,j].scatter(x,y, label=f"Feature {i+j+1}")
+
+        for i, ax in enumerate(axs.flat):
+            ax.set(xlabel=f"Feature {i}")
+            ax.legend()
+        
+        for ax in axs.flat:
+            ax.label_outer()
+
+        show()
+
+
+
