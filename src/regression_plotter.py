@@ -2,6 +2,7 @@ from matplotlib.pyplot import figure, show, subplots
 from mpl_toolkits.mplot3d import Axes3D
 import math
 import numpy as np
+from scipy.optimize import curve_fit
 
 class RegressionPlotter:
     def __init__(self, model, X, Y):
@@ -50,16 +51,24 @@ class RegressionPlotter:
         
         Returns:
         """
-        print("here")
         x = self.data[:, featureIndex]
         y = self.data[:, 0]
+
+        def model(x,a,b):
+            return a*x + b
+        
+        popt,pcov = curve_fit(model, x, y)
+        perr = np.sqrt(np.diag(pcov))
+        xFit = np.linspace(min(x), max(x), 1000)
+        yFit = [model(x, *popt) for x in xFit]
 
         fig = figure()
         frame = fig.add_subplot()
         frame.scatter(x,y, label=f"Feature {featureIndex}")
+        frame.plot(xFit, yFit, label="Linear fit", c="r")
         frame.set_xlabel(f"Feature {featureIndex}")
         frame.set_ylabel("Target variable")
-        frame.set_title("Linear regression line")
+        frame.set_title(f"Linear regression line\nY = ({popt[0]:.3f}±{perr[0]:.2f})x + ({popt[1]:.3f}±{perr[1]:.2f})")
         frame.legend()
         show()
 
