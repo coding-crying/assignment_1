@@ -21,7 +21,7 @@ def main():
     MLR.train(X, Y)
 
     RP = RegressionPlotter(MLR, X, Y)
-    RP.plotRegression(featureIndices=[1,2,3], behavior="multiple")
+    RP.plotRegression(featureIndices=[1,2], behavior="plane")
 
 main()
     

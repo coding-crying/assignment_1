@@ -71,14 +71,13 @@ class RegressionPlotter:
         
         Returns:
         """
-        # TODO function does not work
         x = self.data[:, featureIndex]
         y = self.data[:, 0]
         z = self.model.predict(self.data[:, 1:])
 
         fig = figure()
         frame = fig.add_subplot(111, projection="3d")
-        fig.scatter(x,y,z, label=f"Feature {featureIndex}")
+        frame.scatter(x,y,z, label=f"Feature {featureIndex}")
         frame.set_xlabel(f"Feature {featureIndex}")
         frame.set_ylabel("Target variable")
         frame.set_zlabel("Predicted target variable")
