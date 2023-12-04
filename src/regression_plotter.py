@@ -114,21 +114,19 @@ class RegressionPlotter:
         Returns:
         """
         nRows, nCols = self.calculateSubplotLayout(len(featureIndices))
-        # TODO there is unexpected behavior here where if there is an empty slot, the same feature gets plot multiple times
-        # TODO when a 1d axis is optimal, an exception gets thrown
         fig, axs = subplots(nRows, nCols)
         for i in range(nRows):
-            for j in range(nCols):
+            for j in range(i,nCols):
                 x = self.data[:, i+j]
                 y = self.data[:, 0]
 
-                axs[i,j].scatter(x,y, label=f"Feature {i+j+1}")
-
-        for i, ax in enumerate(axs.flat):
-            ax.set(xlabel=f"Feature {i}")
-            ax.legend()
-        
+                if nRows == 1:
+                    axs[j].scatter(x,y, label=f"Feature {j+1}")
+                else:
+                    axs[i,j].scatter(x,y, label=f"Feature {i+j+1}")
+            
         for ax in axs.flat:
+            ax.legend()
             ax.label_outer()
 
         show()
