@@ -61,4 +61,6 @@ class MultipleLinearRegression:
 
         return predictions
         
+    def getParams(self):
+        return self.optimalParams
 
